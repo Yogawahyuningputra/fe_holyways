@@ -86,7 +86,7 @@ export default function Profile() {
                     </Col>
                     <Col md={4} className="mt-2">
                         <Img className="rounded-3 "
-                            src={ProfileUser}
+                            src={state.user.image}
                             style={{
                                 width: "100%",
                                 height: "auto",
