@@ -4,7 +4,7 @@ import { useQuery } from "react-query";
 import { API } from "../../config/api";
 import { useNavigate, useParams } from "react-router-dom";
 import ProgressBar from 'react-bootstrap/ProgressBar'
-import moment from 'moment'
+import moment from 'momment'
 import '../../App.css'
 function DetailFunding() {
 
