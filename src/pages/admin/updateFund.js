@@ -37,7 +37,7 @@ export default function UpdateFund(props) {
             formData.set("goals", fund.goals)
             formData.set("description", fund.description)
             formData.set("image", fund.image[0])
-            const response = await API.patch(`/funding/${selectData.id}`, config)
+            const response = await API.patch(`/funding/${selectData.id}`, formData, config)
             alert("suksessss bro")
         } catch (error) {
             alert("errorrrrrrrr")
@@ -60,8 +60,8 @@ export default function UpdateFund(props) {
                                 type="text"
                                 placeholder="Title"
                                 name="title"
-                            // defaultValue={selectData.title}
-                            // onChange={handleOnChange}
+                                // defaultValue={selectData.title}
+                                onChange={handleOnChange}
 
                             />
                         </Form.Group><Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
@@ -70,8 +70,8 @@ export default function UpdateFund(props) {
                                 type="number"
                                 placeholder="Goals"
                                 name="goals"
-                            // defaultValue={selectData.goals}
-                            // onChange={handleOnChange}
+                                // defaultValue={selectData.goals}
+                                onChange={handleOnChange}
 
                             />
                         </Form.Group>
@@ -83,9 +83,13 @@ export default function UpdateFund(props) {
                             <Form.Control as="textarea" rows={3}
                                 // defaultValue={selectData.description}
                                 name="description"
-                            // onChange={handleOnChange}
+                                onChange={handleOnChange}
 
                             />
+                        </Form.Group>
+                        <Form.Group controlId="formFile" className="mb-3">
+                            <Form.Label>Upload Files</Form.Label>
+                            <Form.Control type="file" name="image" style={{ borderWidth: "2px", borderColor: "grey", backgroundColor: "#E5E5E5" }} onChange={handleOnChange} />
                         </Form.Group>
 
                         <Modal.Footer>

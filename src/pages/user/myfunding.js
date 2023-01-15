@@ -90,7 +90,6 @@ export default function DataFunding() {
                         className="mt-5 mb-5"
                         style={{ width: "22rem", height: "auto", position: "relative" }}
                     >
-                        {/* Mengambil id dari hasil mapping  */}
                         <Card >
                             <Card.Img variant="top" src={items?.image} alt="images" className="p-2" style={{ maxHeight: "15rem", }} onClick={() => handleClick(items.id)} />
                             < Card.Body className="py-1 px-2" >
