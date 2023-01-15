@@ -127,7 +127,10 @@ export default function Profile() {
                                 <Col sm={7} className="mx-2 text-start">{formatIDR.format(items?.money)}</Col>
                                 <Col sm={4} className="text-end mx-1 mb-2">
                                     {items?.status === "success" ?
-                                        <Badge className="bg-success"> Finished</Badge> : null
+                                        <Badge className="bg-success"> Finished</Badge> :
+                                        items?.status !== "success" ?
+                                            <Badge className="bg-danger">{items?.status}</Badge> :
+                                            null
                                     }</Col>
                             </Row>
                         </Col>

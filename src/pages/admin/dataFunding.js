@@ -3,10 +3,11 @@ import { Container, Col, Card, Row, Stack, Button, ProgressBar } from 'react-boo
 import { useQuery } from 'react-query'
 import { API } from '../../config/api'
 import Swal from 'sweetalert2/dist/sweetalert2.js'
+import { useNavigate } from 'react-router-dom'
 
 
 export default function DataFunding() {
-
+    const navigate = useNavigate()
     let { data: dataFunding } = useQuery("dataFunding", async () => {
         const response = await API.get("/fundings")
         return response.data.data
@@ -82,10 +83,15 @@ export default function DataFunding() {
             console.error(error);
         }
     }
+
+    // function untuk mengambil id dari map berdasarkan params
+    const handleClick = (itemId) => {
+        navigate(`/detail-funding/${itemId}`)
+    }
     return (
 
         <Container>
-            <Card.Title className="fw-bold fs-1 mb-3 text-center mt-2">My Raise Funding</Card.Title>
+            <Card.Title className="fw-bold fs-1 mb-3 text-center mt-2">Data Raise Funding</Card.Title>
             <Row xs="3" className="d-flex justify-content-center gap-2">
 
                 {dataFunding?.map((items) => (
@@ -106,15 +112,17 @@ export default function DataFunding() {
 
                                     {items?.description}
                                 </Col>
-                                <ProgressBar variant="danger" now={now} label={`${now}%`} className="my-2" />
-
+                                {/* <ProgressBar variant="danger" now={now} label={`${now}%`} className="my-2" /> */}
+                                <Col className="text-dark fw-bold text-start">
+                                    {formatIDR.format(items?.goals)}
+                                </Col>
                                 <Stack direction="horizontal">
-                                    <Col className="text-dark fw-bold text-start">
-                                        {formatIDR.format(items?.goals)}
-                                    </Col>
-                                    <Col className="text-secondary mb-2">
-                                        <Button variant="danger" className="text-light fw-bold w-100" onClick={handleDelete}>DELETE</Button>
 
+                                    <Col className="text-secondary mb-2 d-flex justify-content-center">
+                                        <Button variant="danger" className="text-light fw-bold w-75" onClick={handleDelete}>DELETE</Button>
+                                    </Col>
+                                    <Col className="text-secondary mb-2 d-flex justify-content-center">
+                                        <Button variant="danger" className="text-light fw-bold w-75" onClick={() => handleClick(items.id)}>VIEW</Button>
                                     </Col>
                                 </Stack>
                             </Card.Body>

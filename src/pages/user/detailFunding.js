@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react"
-import { Container, Col, Card, Row, Button, Form, Stack, Modal } from 'react-bootstrap';
+import { Container, Col, Card, Row, Button, Form, Stack, Modal, Badge } from 'react-bootstrap';
 import { useQuery } from "react-query";
 import { API } from "../../config/api";
 import { useNavigate, useParams } from "react-router-dom";
 import ProgressBar from 'react-bootstrap/ProgressBar'
 import moment from 'moment'
-
+import '../../App.css'
 function DetailFunding() {
 
     const navigate = useNavigate()
@@ -26,7 +26,7 @@ function DetailFunding() {
         return response.data.data
 
     })
-    // console.log("isi fundingID", detailFunding)
+    console.log("isi fundingID", detailFunding)
 
     // ==========total donation===========//
     let total = 0;
@@ -121,7 +121,7 @@ function DetailFunding() {
             <Container className="my-4">
                 <Row className="d-flex justify-content-center">
                     <Col >
-                        <img src={detailFunding?.image} width="100%" className="rounded-2 mx-3 " alt="img" style={{ maxHeight: "22rem" }} />
+                        <img src={detailFunding?.image} width="100%" className="rounded-2 mx-4 " alt="img" style={{ maxHeight: "22rem" }} />
                     </Col>
                     <Col >
                         <Col xs="4" className="mb-5 w-75 mx-5">
@@ -152,10 +152,10 @@ function DetailFunding() {
                                 </Col>
                                 <Col className="text-dark fw-bold text-end mt-2">
 
-                                    150 more day
+                                    {moment(detailFunding?.created_at).format("DD MMMM YYYY")}
                                 </Col>
                             </Stack>
-                            <Col className="my-2" style={{ height: "10rem" }}>
+                            <Col className="my-2" style={{ height: "9rem" }}>
                                 {detailFunding?.description}
                             </Col>
 
@@ -176,7 +176,7 @@ function DetailFunding() {
                     List Donation {"("} {count} {")"}
                 </Card.Text>
 
-                <Row className="d-flex justify-content-start w-100 mx-3 overflow-auto mb-5" style={{ height: "40vh" }}>
+                <Row className="d-flex justify-content-start w-100 mx-3 overflow-auto mb-5 scrollView" style={{ height: "28vh" }}>
                     {Donations?.map((items, index) => (
 
                         <Col md={3} key={index} className="bg-white mt-3 rounded-2 mx-2" style={{ boxShadow: "0px 0px 5px black", backgroundColor: "white", width: "16rem" }}>
@@ -186,9 +186,17 @@ function DetailFunding() {
                             <Card.Text className="fw-bold py-0">
                                 {moment(items?.created_at).format("DD MMMM YYYY")}
                             </Card.Text>
-                            <Card.Text className="text-danger fs-5 mb-2">
-                                {formatIDR.format(items?.money)}
-                            </Card.Text>
+
+                            <Row>
+                                <Col sm={6} className="mx-2 text-start">{formatIDR.format(items?.money)}</Col>
+                                <Col sm={2} className="text-end mx-1 mb-2">
+                                    {items?.status === "success" ?
+                                        <Badge className="bg-success"> Finished</Badge> :
+                                        items?.status !== "success" ?
+                                            <Badge className="bg-danger">{items?.status}</Badge> :
+                                            null
+                                    }</Col>
+                            </Row>
                         </Col>
 
                     ))}

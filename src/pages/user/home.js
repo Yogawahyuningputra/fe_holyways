@@ -6,23 +6,22 @@ import Funding from './funding';
 import { DataContext } from '../../context/dataContext';
 function Homepage() {
     const data = useContext(DataContext)
-    console.log("data", data)
+    // console.log("data", data)
     return (
 
         <>
             <div>
                 <Row>
-                    <Row style={{ backgroundColor: "#C32424", minHeight: "30rem" }}>
+                    <Row style={{ backgroundColor: "#C32424", minHeight: "33rem" }}>
                         <Col md={{ span: 7, offset: 1 }} className="text-light">
-                            <Card.Text
-                                style={{ fontSize: "45px", marginTop: 20, alignContent: "justify" }}>
+                            <Card.Text className="fw-bold mt-4" style={{ fontSize: "45px" }}>
                                 While you are still standing, try to reach out to the people who are falling.
                             </Card.Text>
                             <Card.Text className="fs-6 my-3">
                                 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
                             </Card.Text>
                             <a href='#donate'>
-                                <Button variant="light" className="text-danger mx-2 fw-bold w-25  mb-5">Donate Now</Button>
+                                <Button variant="light" className="text-danger mx-1 fw-bold w-25  my-3">Donate Now</Button>
                             </a>
                         </Col>
                         <Col md={2} className="mx-5">

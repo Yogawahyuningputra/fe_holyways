@@ -7,11 +7,10 @@ export const DataContext = createContext();
 export const DataProvider = ({ children }) => {
     const [data, setData] = useState([]);
 
-
     // Fetch data function
     const fetchData = async () => {
         try {
-            const response = await API.get("/donationByFunding");
+            const response = await API.get("/fundings");
             setData(response.data);
         } catch (error) {
             console.error(error);

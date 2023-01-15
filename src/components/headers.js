@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react"
 import Container from 'react-bootstrap/Container';
 import { Navbar, Button } from 'react-bootstrap';
-import Holyways from "./assest/images/holyways.png"
+import Holyways from "./assest/images/holyways.svg"
 import Login from '../components/auth/login'
 import Register from '../components/auth/register'
 import MenuUser from "./menuUser";
@@ -45,13 +45,13 @@ function Headers() {
     return (
         <>
 
-            <Navbar style={{ backgroundColor: "#C32424" }}>
+            <Navbar style={{ backgroundColor: "#C32424" }} className="navbar fixed-top">
                 <Container>
                     <Navbar.Brand href="/">
                         <img
                             src={Holyways}
                             width="85"
-                            height="55"
+                            height="60"
                             className="d-inline-block align-top"
                             alt="React Bootstrap logo"
                         />

@@ -20,33 +20,36 @@ function Funding() {
         const response = await API.get("/fundings")
         return response.data.data
     })
+
     const detailFunding = (id) => {
         navigate("/detail-funding/" + id)
     }
 
-    const now = 90
+    const now = ""
     const formatIDR = new Intl.NumberFormat(undefined, {
         style: "currency",
         currency: "IDR",
         maximumFractionDigits: 0,
     })
     const [search, setSearch] = useState("")
-    console.log("isi filter", search)
+    // console.log("isi filter", search)
     return (
         <Container>
             <Card.Title className="fw-bold fs-1 mb-3 mt-5 text-center">Donate Now</Card.Title>
-            <Col md={10}>
 
-                <InputGroup className="d-flex justify-content-center mb-3 w-50 mt-2">
-                    <Form.Control
-                        placeholder="Recipient's username"
-                        aria-label="Recipient's username"
-                        aria-describedby="basic-addon2"
-                    />
-                    <Button variant="outline-secondary" id="button-addon2" onChange={e => { setSearch(e.target.value) }}>
-                        Search
-                    </Button>
-                </InputGroup>
+            <Col md={12} className="mx-3 text-end">
+                <Col md={6}>
+
+                    <InputGroup className="d-flex justify-content-center mb-3 mt-2 shadow-2 fw-bold">
+                        <Form.Control onChange={e => { setSearch(e.target.value) }}
+                            placeholder="Search Here ..."
+                            aria-label="Recipient's username"
+                            aria-describedby="basic-addon2"
+                        />
+
+                    </InputGroup>
+                </Col>
+
             </Col>
 
             <Row xs="3" className="d-flex justify-content-center gap-2">
@@ -81,7 +84,7 @@ function Funding() {
 
                                     {items?.description}
                                 </Col>
-                                <ProgressBar variant="danger" now={now} label={`${now}%`} className="my-2" />
+                                <ProgressBar variant="danger" now={items?.goals} label={`${now}`} className="my-2" />
                                 <Stack direction="horizontal">
                                     <Col className="text-dark fw-bold text-start">
                                         {formatIDR.format(items?.goals)}

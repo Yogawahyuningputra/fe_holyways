@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Form, Button, Card, Alert, Stack } from 'react-bootstrap';
+import { Container, Form, Button, Card, Alert, } from 'react-bootstrap';
 import { useMutation } from "react-query";
 import { API } from "../../config/api"
 
@@ -45,12 +45,14 @@ function FormFunding() {
             const alert = (<Alert variant='success' className='py-1'>
                 Success
             </Alert>)
+
             setFunding({
                 title: '',
                 goals: '',
                 description: '',
                 image: '',
             })
+            e.target.reset()
             setMessage(alert)
 
             // console.log(formData)
@@ -63,14 +65,16 @@ function FormFunding() {
     })
 
     return (
-        <Container className="w-50 fw-bold bg-light rounded-2">
+        <Container className="w-50 fw-bold rounded-2 shadow mb-5">
 
 
-            <Form className="mx-5" style={{ marginTop: "110px" }} onSubmit={(e) => handleOnSubmit.mutate(e)}>
-                <Form.Label className="text-start fw-bold fs-3 mb-5">Make Raise Fund</Form.Label>
+            <Form className="mx-5 mt-1" onSubmit={(e) => handleOnSubmit.mutate(e)}>
+                <Form.Label className="text-start fw-bold fs-3 my-3">Make Raise Fund</Form.Label>
                 {message}
+
                 <Form.Group controlId="formGridName" onChange={handleOnChange}>
-                    <Form.Control name="title" type="text" placeholder="Title" style={{ backgroundColor: "#e1e1e1" }} />
+                    <Form.Label>Title</Form.Label>
+                    <Form.Control name="title" type="text" placeholder="Title" style={{ backgroundColor: "#e1e1e1" }} autoFocus />
                 </Form.Group>
 
 
@@ -84,16 +88,18 @@ function FormFunding() {
                 )}
 
                 <Form.Control onChange={handleOnChange}
-                    className="my-2 border-light"
+                    className="my-3 border-light"
                     style={{ borderColor: "#C32424", width: "100px" }}
                     type="file"
                     placeholder="Attachment Files"
                     name="image"
                     required
+
                 />
 
 
                 <Form.Group controlId="formGridName" onChange={handleOnChange}>
+                    <Form.Label>Goals</Form.Label>
                     <Form.Control name="goals" type="text" placeholder="Goals" style={{ backgroundColor: "#e1e1e1" }} />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formGridAddress1">

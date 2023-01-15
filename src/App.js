@@ -12,7 +12,7 @@ import Profile from "./pages/user/profile"
 import Header from "./components/headers"
 import DetailFunding from "./pages/user/detailFunding"
 import MyFunding from "./pages/user/myfunding"
-
+import ViewFund from "./pages/user/viewFund"
 //=======//
 import AdminRoute from "./components/router/adminRoute"
 import Form from "./pages/admin/formFund"
@@ -86,6 +86,7 @@ function App() {
           <Route exact path="/detail-funding/:id" element={<DetailFunding />} />
           <Route exact path="/form" element={<Form />} />
           <Route exact path="/myfunding" element={<MyFunding />} />
+          <Route exact path="/viewdonate/:id" element={<ViewFund />} />
 
 
         </Route>
@@ -93,6 +94,8 @@ function App() {
         <Route path="/admin" element={<AdminRoute />}>
           <Route index element={<DataFunding />} />
           <Route exact path="/admin/form" element={<Form />} />
+          <Route exact path="/admin/detail-funding/:id" element={<DetailFunding />} />
+
         </Route>
 
       </Routes>

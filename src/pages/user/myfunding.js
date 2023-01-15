@@ -1,13 +1,17 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Container, Col, Card, Row, Stack, Button, ProgressBar } from 'react-bootstrap'
 import { useQuery } from 'react-query'
 import { API } from '../../config/api'
 import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2/dist/sweetalert2.js'
+import UpdateFund from '../admin/updateFund'
 
 export default function DataFunding() {
+    const [update, setUpdate] = useState(false)
+    const [selectData, setSelectedData] = useState(null)
     let navigate = useNavigate()
-    let { data: myFunding } = useQuery("myFunding", async () => {
+
+    let { data: myFunding } = useQuery("myFundingss", async () => {
         const response = await API.get("/fundingByUser")
         return response.data.data
 
@@ -19,6 +23,8 @@ export default function DataFunding() {
         maximumFractionDigits: 0,
     })
     const now = 50
+
+
     let ID = 0
     if (myFunding?.length !== 0) {
         myFunding?.map((element) => (
@@ -27,6 +33,8 @@ export default function DataFunding() {
         ))
 
     }
+    // console.log("myfunding", myFunding)
+
     const handleDelete = async () => {
         try {
             Swal.fire({
@@ -56,7 +64,16 @@ export default function DataFunding() {
         }
     }
 
+    // function untuk mengambil id dari map berdasarkan params
+    const handleClick = (itemId) => {
+        navigate(`/viewdonate/${itemId}`)
+    }
 
+    const handleUpdate = (items) => {
+        setUpdate(true)
+        setSelectedData(items)
+    }
+    console.log("isi select awal ", selectData)
 
     return (
 
@@ -73,9 +90,9 @@ export default function DataFunding() {
                         className="mt-5 mb-5"
                         style={{ width: "22rem", height: "auto", position: "relative" }}
                     >
+                        {/* Mengambil id dari hasil mapping  */}
                         <Card >
-
-                            <Card.Img variant="top" src={items?.image} alt="images" className="p-2" style={{ maxHeight: "15rem", }} />
+                            <Card.Img variant="top" src={items?.image} alt="images" className="p-2" style={{ maxHeight: "15rem", }} onClick={() => handleClick(items.id)} />
                             < Card.Body className="py-1 px-2" >
 
                                 <Col className="mb-1 mt-0 py-0 fs-5">
@@ -85,25 +102,34 @@ export default function DataFunding() {
 
                                     {items?.description}
                                 </Col>
-                                <ProgressBar variant="danger" now={now} label={`${now}%`} className="my-2" />
-
+                                <Col className="text-dark fw-bold text-start mb-2">
+                                    {formatIDR.format(items?.goals)}
+                                </Col>
                                 <Stack direction="horizontal">
-                                    <Col className="text-dark fw-bold text-start">
-                                        {formatIDR.format(items?.goals)}
+                                    <Col className="text-secondary mb-2 d-flex justify-content-center">
+                                        <Button variant="danger" className="text-light fw-bold w-75" onClick={handleDelete} >DELETE</Button>
                                     </Col>
-                                    <Col className="text-secondary mb-2">
-                                        <Button variant="danger" className="text-light fw-bold w-100" onClick={handleDelete} >DELETE</Button>
+                                    <Col className="text-secondary mb-2 d-flex justify-content-center">
+                                        <Button variant="danger" className="text-light fw-bold w-75" onClick={() => handleUpdate(items)}>EDIT</Button>
                                     </Col>
                                 </Stack>
                             </Card.Body>
 
                         </Card>
-
+                        <UpdateFund
+                            show={update}
+                            onHide={setUpdate}
+                            selectData={selectData} />
                     </Col >
+
+
 
                 ))}
 
             </Row >
+
+
+
         </Container>
     )
 }
