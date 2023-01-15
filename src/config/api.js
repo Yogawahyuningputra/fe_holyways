@@ -1,7 +1,7 @@
 import axios from "axios"
 
 export const API = axios.create({
-    baseURL: "be-holyways-production.up.railway.app/api/v1/",
+    baseURL: "https://be-holyways-production.up.railway.app/api/v1",
 })
 
 export const setAuthToken = (token) => {
