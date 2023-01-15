@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import { Container, Col, Card, Row, Button, Form, Stack, Modal, Badge } from 'react-bootstrap';
 import { useQuery } from "react-query";
 import { API } from "../../config/api";
 import { useNavigate, useParams } from "react-router-dom";
 import ProgressBar from 'react-bootstrap/ProgressBar'
-import moment from 'momment'
+import moment from 'moment'
 import '../../App.css'
+import { UserContext } from "../../context/userContext";
 function DetailFunding() {
-
+    const [state] = useContext(UserContext)
     const navigate = useNavigate()
     const [show, setShow] = useState(false);
     const [form, setForm] = useState({
@@ -26,7 +27,7 @@ function DetailFunding() {
         return response.data.data
 
     })
-    console.log("isi fundingID", detailFunding)
+    // console.log("isi fundingID", detailFunding)
 
     // ==========total donation===========//
     let total = 0;
@@ -35,7 +36,7 @@ function DetailFunding() {
     for (let i = 0; i < Donations?.length; i++) {
         total += Donations[i]?.money;
     }
-    // console.log("Total: " + total);
+    // console.log("Total: " + state.user.role);
 
     let fundGoals = detailFunding?.goals
     let percent = (100 / fundGoals) * total;
@@ -161,7 +162,7 @@ function DetailFunding() {
 
 
                             <Col className="text-secondary mt-3">
-                                {percent !== 100 ? (
+                                {percent !== 100 && state.user.role !== "admin" ? (
                                     <Button variant="danger" className="text-light fw-bold w-100" onClick={() => setShow(true)}>Donate</Button>
                                 ) : (
                                     <Button variant="danger" className="text-light fw-bold w-100" disabled>Donation Closed</Button>

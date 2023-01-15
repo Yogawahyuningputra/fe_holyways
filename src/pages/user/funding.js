@@ -37,10 +37,9 @@ function Funding() {
         <Container>
             <Card.Title className="fw-bold fs-1 mb-3 mt-5 text-center">Donate Now</Card.Title>
 
-            <Col md={12} className="mx-3 text-end">
+            <Col md={12} className="text-end d-flex justify-content-center">
                 <Col md={6}>
-
-                    <InputGroup className="d-flex justify-content-center mb-3 mt-2 shadow-2 fw-bold">
+                    <InputGroup className=" mb-3 mt-2 shadow-2 fw-bold">
                         <Form.Control onChange={e => { setSearch(e.target.value) }}
                             placeholder="Search Here ..."
                             aria-label="Recipient's username"
