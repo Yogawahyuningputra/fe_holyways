@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
+import { Button, Form, Modal, Alert } from 'react-bootstrap';
 import { useMutation } from 'react-query';
 import { API } from '../../config/api';
 
 export default function UpdateFund(props) {
     const { show, onHide, selectData } = props
     console.log("isi select props", selectData)
+    const [message, setMessage] = useState(null)
     const [preview, setPreview] = useState()
     const [fund, setFund] = useState({
         title: '',
@@ -38,7 +39,11 @@ export default function UpdateFund(props) {
             formData.set("description", fund.description)
             formData.set("image", fund.image[0])
             const response = await API.patch(`/funding/${selectData.id}`, formData, config)
-            alert("suksessss bro")
+            const alert = (
+                <Alert variant="success" className='py-1'>Update Success</Alert>
+            )
+            setMessage(alert)
+            // alert("suksessss bro")
         } catch (error) {
             alert("errorrrrrrrr")
         }
@@ -53,10 +58,10 @@ export default function UpdateFund(props) {
                 </Modal.Header>
                 <Modal.Body>
                     <Form onSubmit={(e) => handleOnSubmit.mutate(e)} >
-
+                        {message}
                         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                             <Form.Label>Title</Form.Label>
-                            <Form.Control
+                            <Form.Control style={{ borderWidth: "2px", borderColor: "grey", backgroundColor: "#E5E5E5" }}
                                 type="text"
                                 placeholder="Title"
                                 name="title"
@@ -66,7 +71,7 @@ export default function UpdateFund(props) {
                             />
                         </Form.Group><Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                             <Form.Label>Goals</Form.Label>
-                            <Form.Control
+                            <Form.Control style={{ borderWidth: "2px", borderColor: "grey", backgroundColor: "#E5E5E5" }}
                                 type="number"
                                 placeholder="Goals"
                                 name="goals"
@@ -80,7 +85,7 @@ export default function UpdateFund(props) {
                             controlId="exampleForm.ControlTextarea1"
                         >
                             <Form.Label>Description</Form.Label>
-                            <Form.Control as="textarea" rows={3}
+                            <Form.Control as="textarea" rows={3} style={{ borderWidth: "2px", borderColor: "grey", backgroundColor: "#E5E5E5" }}
                                 // defaultValue={selectData.description}
                                 name="description"
                                 onChange={handleOnChange}
@@ -91,6 +96,10 @@ export default function UpdateFund(props) {
                             <Form.Label>Upload Files</Form.Label>
                             <Form.Control type="file" name="image" style={{ borderWidth: "2px", borderColor: "grey", backgroundColor: "#E5E5E5" }} onChange={handleOnChange} />
                         </Form.Group>
+                        {preview && (
+                            <img src={preview} alt={preview} style={{ width: "15rem" }} />
+
+                        )}
 
                         <Modal.Footer>
                             <Button variant="danger"
