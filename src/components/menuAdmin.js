@@ -18,16 +18,16 @@ const MenuUsers = ({ logout }) => {
             <Popover id="popover-basic" style={{ width: "auto", height: "auto", fontWeight: "bold" }}>
 
                 <Popover.Body className="mt-1 mb-1 py-1" onClick={() => navigate(`/admin/form`)}>
-                    <img src={Raise} alt="" style={{ width: "30px", height: "30px", marginRight: "30px" }} />Make Raise
+                    <img src={Raise} alt="" style={{ width: "30px", height: "30px", marginRight: "30px", cursor: "pointer" }} />Make Raise
                 </Popover.Body>
 
                 <hr className="mt-1 mb-1 py-1" />
                 <Popover.Body className="mt-1 mb-1 py-1" onClick={logout}>
-                    <Nav.Link ><img src={Logout} alt="" style={{ width: "30px", height: "30px", marginRight: "30px" }} />Logout</Nav.Link>
+                    <Nav.Link ><img src={Logout} alt="" style={{ width: "30px", height: "30px", marginRight: "30px", cursor: "pointer" }} />Logout</Nav.Link>
                 </Popover.Body>
             </Popover>
         }>
-            <img src={Profile} alt="" style={{ width: "50px", height: "50px" }} className="rounded-circle" />
+            <img src={Profile} alt="" style={{ width: "50px", height: "50px", cursor: "pointer" }} className="rounded-circle" />
         </OverlayTrigger>
 
     );

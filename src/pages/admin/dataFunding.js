@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom'
 
 export default function DataFunding() {
     const navigate = useNavigate()
-    let { data: dataFunding } = useQuery("dataFunding", async () => {
+    let { data: dataFunding, refetch: refetchFund } = useQuery("dataFunding", async () => {
         const response = await API.get("/fundings")
         return response.data.data
 
@@ -22,21 +22,21 @@ export default function DataFunding() {
         currency: "IDR",
         maximumFractionDigits: 0,
     })
-    let ID = 0
-    if (dataFunding?.length !== 0) {
-        dataFunding?.map((element) => (
-            ID = element.id
+    // let ID = 0
+    // if (dataFunding !== null) {
+    //     dataFunding?.map((element) => (
+    //         ID = element.id
 
-        ))
+    //     ))
 
-    }
-    console.log("Id", ID)
+    // }
+    // console.log("Id", ID)
     let { data: Donationss } = useQuery("Donationss", async () => {
         const response = await API.get("/donations")
         return response.data.data
 
     })
-    console.log("datadons", Donationss)
+    // console.log("datadons", Donationss)
     // ==========total donation===========//
     // let total = 0;
     // let count = Donationss?.length
@@ -53,7 +53,7 @@ export default function DataFunding() {
     let now = 0
 
 
-    const handleDelete = async () => {
+    const handleDelete = (itemId) => {
 
         try {
             Swal.fire({
@@ -65,10 +65,11 @@ export default function DataFunding() {
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Yes, delete it!'
             })
-                .then((result) => {
+                .then(async (result) => {
 
                     if (result.isConfirmed) {
-
+                        await API.delete(`/funding/${itemId}`)
+                        refetchFund()
                         Swal.fire(
                             'Deleted!',
                             'Your file has been deleted.',
@@ -77,10 +78,14 @@ export default function DataFunding() {
                     }
                 })
 
-            await API.delete(`/funding/` + ID);
-
         } catch (error) {
             console.error(error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong!',
+
+            })
         }
     }
 
@@ -96,7 +101,7 @@ export default function DataFunding() {
 
                 {dataFunding?.map((items) => (
 
-                    <Col xs="4"
+                    <Col xs="4" key={items?.id}
                         className="mt-5 mb-5"
                         style={{ width: "22rem", height: "auto", position: "relative" }}
                     >
@@ -119,7 +124,7 @@ export default function DataFunding() {
                                 <Stack direction="horizontal">
 
                                     <Col className="text-secondary mb-2 d-flex justify-content-center">
-                                        <Button variant="danger" className="text-light fw-bold w-75" onClick={handleDelete}>DELETE</Button>
+                                        <Button variant="danger" className="text-light fw-bold w-75" onClick={() => handleDelete(items.id)}>DELETE</Button>
                                     </Col>
                                     <Col className="text-secondary mb-2 d-flex justify-content-center">
                                         <Button variant="danger" className="text-light fw-bold w-75" onClick={() => handleClick(items.id)}>VIEW</Button>

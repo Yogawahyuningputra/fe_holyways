@@ -1,12 +1,13 @@
 import React, { useState } from "react";
-import { Container, Form, Button, Card, Alert, } from 'react-bootstrap';
+import { Container, Form, Button, Card, } from 'react-bootstrap';
 import { useMutation } from "react-query";
 import { API } from "../../config/api"
+import Swal from 'sweetalert2'
+
 
 function FormFunding() {
 
     const [preview, setPreview] = useState(null)
-    const [message, setMessage] = useState(null)
 
     const [funding, setFunding] = useState({
         title: '',
@@ -42,10 +43,13 @@ function FormFunding() {
 
             const response = await API.post("/funding", formData, config, funding)
 
-            const alert = (<Alert variant='success' className='py-1'>
-                Success
-            </Alert>)
-
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Your work has been saved',
+                showConfirmButton: false,
+                timer: 1500
+            })
             setFunding({
                 title: '',
                 goals: '',
@@ -53,14 +57,15 @@ function FormFunding() {
                 image: '',
             })
             e.target.reset()
-            setMessage(alert)
 
             // console.log(formData)
         } catch (error) {
-            const alert = (
-                <Alert variant='danger' className="py-1">Failed</Alert>
-            )
-            setMessage(alert)
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong!',
+
+            })
         }
     })
 
@@ -70,11 +75,10 @@ function FormFunding() {
 
             <Form className="mx-5 mt-1" onSubmit={(e) => handleOnSubmit.mutate(e)}>
                 <Form.Label className="text-start fw-bold fs-3 my-3">Make Raise Fund</Form.Label>
-                {message}
 
                 <Form.Group controlId="formGridName" onChange={handleOnChange}>
                     <Form.Label>Title</Form.Label>
-                    <Form.Control name="title" type="text" placeholder="Title" style={{ backgroundColor: "#e1e1e1" }} autoFocus />
+                    <Form.Control name="title" type="text" placeholder="Title" style={{ borderWidth: "2px", borderColor: "grey", backgroundColor: "#E5E5E5" }} autoFocus />
                 </Form.Group>
 
 
@@ -89,7 +93,7 @@ function FormFunding() {
 
                 <Form.Control onChange={handleOnChange}
                     className="my-3 border-light"
-                    style={{ borderColor: "#C32424", width: "100px" }}
+                    style={{ width: "100px", borderWidth: "2px", borderColor: "grey", }}
                     type="file"
                     placeholder="Attachment Files"
                     name="image"
@@ -100,7 +104,7 @@ function FormFunding() {
 
                 <Form.Group controlId="formGridName" onChange={handleOnChange}>
                     <Form.Label>Goals</Form.Label>
-                    <Form.Control name="goals" type="text" placeholder="Goals" style={{ backgroundColor: "#e1e1e1" }} />
+                    <Form.Control name="goals" type="text" placeholder="Goals" style={{ borderWidth: "2px", borderColor: "grey", backgroundColor: "#E5E5E5" }} />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formGridAddress1">
                     <Form.Label>Description</Form.Label>
@@ -108,7 +112,7 @@ function FormFunding() {
                         as="textarea"
                         name="description"
                         placeholder="Leave a comment here"
-                        style={{ height: '100px', backgroundColor: "#e1e1e1" }}
+                        style={{ height: '100px', backgroundColor: "#e1e1e1", borderWidth: "2px", borderColor: "grey", }}
                     />
                 </Form.Group>
                 <div className='d-flex justify-content-end mt-5'>

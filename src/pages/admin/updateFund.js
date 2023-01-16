@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Form, Modal, Alert } from 'react-bootstrap';
+import { Button, Form, Modal } from 'react-bootstrap';
 import { useMutation } from 'react-query';
 import { API } from '../../config/api';
 import Swal from 'sweetalert2'
@@ -7,7 +7,6 @@ import Swal from 'sweetalert2'
 export default function UpdateFund(props) {
     const { show, onHide, selectData, onSaves } = props
     console.log("isi select props", selectData)
-    const [message, setMessage] = useState(null)
     const [preview, setPreview] = useState()
     const [fund, setFund] = useState({
         title: '',
@@ -43,15 +42,25 @@ export default function UpdateFund(props) {
             formData.set("description", fund.description)
             formData.set("image", fund.image[0])
             const response = await API.patch(`/funding/${selectData.id}`, formData, config)
-            const alert = (
-                <Alert variant="success" className='py-1'>Update Success</Alert>
-            )
-            setMessage(alert)
+
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Your work has been saved',
+                showConfirmButton: false,
+                timer: 1500
+            })
+
             onHide()
             onSaves()
             // alert("suksessss bro")
         } catch (error) {
-            alert("errorrrrrrrr")
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong!',
+
+            })
         }
     })
 
@@ -64,7 +73,6 @@ export default function UpdateFund(props) {
                 </Modal.Header>
                 <Modal.Body>
                     <Form onSubmit={(e) => handleOnSubmit.mutate(e)} >
-                        {message}
                         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                             <Form.Label>Title</Form.Label>
                             <Form.Control style={{ borderWidth: "2px", borderColor: "grey", backgroundColor: "#E5E5E5" }}

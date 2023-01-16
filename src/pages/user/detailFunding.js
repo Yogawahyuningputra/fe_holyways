@@ -161,7 +161,7 @@ function DetailFunding() {
                             </Col>
 
 
-                            <Col className="text-secondary mt-3">
+                            <Col className="text-secondary mt-1">
                                 {percent !== 100 && state.user.role !== "admin" ? (
                                     <Button variant="danger" className="text-light fw-bold w-100" onClick={() => setShow(true)}>Donate</Button>
                                 ) : (
