@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { Button, Form, Modal, Alert } from 'react-bootstrap';
 import { useMutation } from 'react-query';
 import { API } from '../../config/api';
+import Swal from 'sweetalert2'
 
 export default function UpdateFund(props) {
-    const { show, onHide, selectData } = props
+    const { show, onHide, selectData, onSaves } = props
     console.log("isi select props", selectData)
     const [message, setMessage] = useState(null)
     const [preview, setPreview] = useState()
@@ -26,6 +27,9 @@ export default function UpdateFund(props) {
         }
     }
     const handleOnSubmit = useMutation(async (e) => {
+        if (fund.image === "") {
+            Swal.fire('Please Choose Images')
+        }
         try {
             e.preventDefault()
             const config = {
@@ -43,6 +47,8 @@ export default function UpdateFund(props) {
                 <Alert variant="success" className='py-1'>Update Success</Alert>
             )
             setMessage(alert)
+            onHide()
+            onSaves()
             // alert("suksessss bro")
         } catch (error) {
             alert("errorrrrrrrr")
@@ -67,6 +73,7 @@ export default function UpdateFund(props) {
                                 name="title"
                                 // defaultValue={selectData.title}
                                 onChange={handleOnChange}
+                                onFocus
 
                             />
                         </Form.Group><Form.Group className="mb-3" controlId="exampleForm.ControlInput1">

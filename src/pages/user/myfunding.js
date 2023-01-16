@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Container, Col, Card, Row, Stack, Button, ProgressBar } from 'react-bootstrap'
+import { Container, Col, Card, Row, Stack, Button } from 'react-bootstrap'
 import { useQuery } from 'react-query'
 import { API } from '../../config/api'
 import { useNavigate } from 'react-router-dom'
@@ -11,7 +11,7 @@ export default function DataFunding() {
     const [selectData, setSelectedData] = useState(null)
     let navigate = useNavigate()
 
-    let { data: myFunding } = useQuery("myFundingss", async () => {
+    let { data: myFunding, refetch: refetchUpdate } = useQuery("myFundingss", async () => {
         const response = await API.get("/fundingByUser")
         return response.data.data
 
@@ -22,7 +22,6 @@ export default function DataFunding() {
         currency: "IDR",
         maximumFractionDigits: 0,
     })
-    const now = 50
 
 
     let ID = 0
@@ -118,7 +117,12 @@ export default function DataFunding() {
                         <UpdateFund
                             show={update}
                             onHide={setUpdate}
-                            selectData={selectData} />
+                            selectData={selectData}
+                            onSaves={() => {
+                                setUpdate(false);
+                                refetchUpdate();
+                            }}
+                        />
                     </Col >
 
 

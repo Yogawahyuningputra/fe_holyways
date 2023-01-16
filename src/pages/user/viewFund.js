@@ -1,8 +1,8 @@
 import React, { useState, useContext } from "react"
-import { Container, Col, Card, Row, Button, Form, Stack, Modal } from 'react-bootstrap';
+import { Container, Col, Card, Row, Button, Stack, Modal } from 'react-bootstrap';
 import { useQuery } from "react-query";
 import { API } from "../../config/api";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import ProgressBar from 'react-bootstrap/ProgressBar'
 import moment from 'moment'
 import { DataContext } from "../../context/dataContext";
@@ -92,7 +92,7 @@ function MyFundingDetail() {
                                 </Col>
                                 <Col className="text-dark fw-bold text-end mt-2">
 
-                                    150 more day
+                                    {moment(ViewFund?.created_at).format("DD MMMM YYYY")}
                                 </Col>
                             </Stack>
                             <Col className="my-2" style={{ height: "9rem" }}>
@@ -165,8 +165,9 @@ function MyFundingDetail() {
             >
 
                 <Modal.Body>
-                    <Col>
-                        INI MODAL VIEW DONATIONS
+                    <Col className="md-4">
+                        Dana yang terkumpul senilai {formatIDR.format(total)} dari total yang di perlukan senilai
+                        {formatIDR.format(ViewFund?.goals)}
                     </Col>
                 </Modal.Body>
 
