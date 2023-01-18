@@ -12,7 +12,6 @@ import { useQuery } from "react-query";
 import { API } from "../../config/api";
 import moment from 'moment'
 import '../../App.css'
-import { RotatingLines } from 'react-loader-spinner'
 
 
 
@@ -20,7 +19,7 @@ export default function Profile() {
     const [update, setUpdate] = useState(false);
     const [value, setValue] = useState(null)
     const [state] = useContext(UserContext)
-    let { data: user, refetch: refetchUser, isFetching } = useQuery("user", async () => {
+    let { data: user, refetch: refetchUser } = useQuery("user", async () => {
         const response = await API.get(`/user/${state.user.id}`)
         return response.data.data
     })
@@ -43,19 +42,7 @@ export default function Profile() {
         maximumFractionDigits: 0,
     })
 
-    if (isFetching) {
-        return (
-            <div className='d-flex justify-content-center' style={{ marginTop: "13rem" }}>
-                <RotatingLines
-                    strokeColor="grey"
-                    strokeWidth="5"
-                    animationDuration="0.75"
-                    width="96"
-                    visible={true}
-                />
-            </div>
-        )
-    }
+
 
     return (
         <Container className="d-flex justify-content-start w-100">
