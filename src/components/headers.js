@@ -10,9 +10,18 @@ import { useNavigate } from "react-router-dom";
 import { UserContext } from "../context/userContext"
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import { useQuery } from "react-query";
+import { API } from "../config/api";
 const Swal2 = withReactContent(Swal)
 function Headers() {
     const [state, dispatch] = useContext(UserContext)
+
+    let { data: userNavs } = useQuery("usernavs", async () => {
+        const response = await API.get(`/user/${state.user.id}`)
+        return response.data.data
+    })
+    console.log(userNavs?.image)
+
 
     const navigate = useNavigate()
 
@@ -66,7 +75,7 @@ function Headers() {
 
                                 ) : (
 
-                                    <MenuUser logout={logout} />
+                                    <MenuUser logout={logout} img={userNavs?.image} />
 
                                 )}
                             </Navbar.Brand>

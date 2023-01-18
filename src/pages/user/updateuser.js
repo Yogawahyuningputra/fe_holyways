@@ -1,14 +1,13 @@
-import React, { useContext, useState } from 'react';
-import { Button, Form, Modal, Alert } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { Button, Form, Modal } from 'react-bootstrap';
 import { useMutation } from 'react-query';
 import { API } from '../../config/api';
-import { UserContext } from '../../context/userContext';
-import { Swal } from 'sweetalert2/dist/sweetalert2';
-export default function UpdateUser({ show, onHide }) {
+import Swal from 'sweetalert2'
 
-    const [state] = useContext(UserContext)
+
+export default function UpdateUser({ show, onHide, onSaves, value }) {
+
     const [preview, setPreview] = useState(null)
-    const [message, setMessage] = useState(null)
     const [user, setUser] = useState({
 
         fullname: '',
@@ -20,7 +19,20 @@ export default function UpdateUser({ show, onHide }) {
         image: '',
 
     })
-    // console.log(user)
+    // console.log("ini value", value)
+    useEffect(() => {
+        setUser({
+            fullname: value?.fullname,
+            email: value?.email,
+            phone: value?.phone,
+            gender: value?.gender,
+            address: value?.address
+        })
+    }, [value])
+
+
+
+
     const handleOnChange = (e) => {
         setUser({
             ...user, [e.target.name]:
@@ -52,12 +64,17 @@ export default function UpdateUser({ show, onHide }) {
             formData.set("address", user.address)
             formData.set("role", user.role)
             formData.set("image", user.image[0])
+
             const response = await API.patch("/user", formData, config)
 
-            const alert = (
-                <Alert variant="success" className='py-1'>Update Success</Alert>
-            )
-            setMessage(alert)
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Your work has been saved',
+                showConfirmButton: false,
+                timer: 1500
+            })
+            onSaves()
             setUser({
                 fullname: '',
                 email: '',
@@ -79,8 +96,6 @@ export default function UpdateUser({ show, onHide }) {
 
 
 
-
-
     return (
         <>
             <Modal show={show} onHide={onHide}>
@@ -91,7 +106,6 @@ export default function UpdateUser({ show, onHide }) {
                     <Form onSubmit={(e) => handleOnSubmit.mutate(e)} >
 
                         <Form.Group className="mb-3 scrollView fw-bold" controlId="formBasic" style={{ height: '38vh', overflowY: 'scroll' }} >
-                            {message}
                             <Form.Group className="mb-3" controlId="formBasicName" >
                                 <Form.Label>Fullname</Form.Label>
 
@@ -102,7 +116,7 @@ export default function UpdateUser({ show, onHide }) {
                                     placeholder="Fullname"
                                     name="fullname"
                                     onChange={handleOnChange}
-                                    defaultValue={state.user.fullname}
+                                    value={user.fullname}
                                     required
                                 />
                             </Form.Group>
@@ -116,7 +130,7 @@ export default function UpdateUser({ show, onHide }) {
                                     placeholder="Email"
                                     name="email"
                                     onChange={handleOnChange}
-                                    defaultValue={state.user.email}
+                                    value={user.email}
                                     required
 
                                 />
@@ -131,7 +145,7 @@ export default function UpdateUser({ show, onHide }) {
                                     type="password"
                                     placeholder="Password"
                                     onChange={handleOnChange}
-                                    defaultValue={state.user.password}
+                                    value={user.password}
 
 
                                 />
@@ -141,7 +155,7 @@ export default function UpdateUser({ show, onHide }) {
                                 <Form.Label>Gender </Form.Label>
                                 <Form.Select className="py-1 fs-6 text-secondary" type="number" name='gender' style={{ borderWidth: "2px", borderColor: "grey", backgroundColor: "#E5E5E5" }} onChange={handleOnChange} required>
 
-                                    <option hidden>Gender</option>
+                                    <option hidden>{user?.gender}</option>
                                     <option>Male</option>
                                     <option>Female</option>
 
@@ -156,7 +170,7 @@ export default function UpdateUser({ show, onHide }) {
                                     placeholder="Phone"
                                     name="phone"
                                     onChange={handleOnChange}
-                                    defaultValue={state.user.phone}
+                                    value={user.phone}
                                     required
                                 />
                             </Form.Group>
@@ -170,7 +184,7 @@ export default function UpdateUser({ show, onHide }) {
                                     placeholder="Address"
                                     name="address"
                                     onChange={handleOnChange}
-                                    defaultValue={state.user.address}
+                                    value={user.address}
                                     required
                                 />
                             </Form.Group>
@@ -179,7 +193,7 @@ export default function UpdateUser({ show, onHide }) {
                                 <Form.Control type="file" name="image" style={{ borderWidth: "2px", borderColor: "grey", backgroundColor: "#E5E5E5" }} onChange={handleOnChange} />
                             </Form.Group>
                             {preview && (
-                                <img src={preview} alt={preview} style={{ width: "15rem" }} defaultValue={state?.user?.image} />
+                                <img src={preview} alt={preview} style={{ width: "15rem" }} value={user.image} />
 
                             )}
 

@@ -1,12 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { useMutation } from 'react-query';
 import { API } from '../../config/api';
 import Swal from 'sweetalert2'
+import { RotatingLines } from 'react-loader-spinner'
 
+<RotatingLines
+    strokeColor="grey"
+    strokeWidth="5"
+    animationDuration="0.75"
+    width="96"
+    visible={true}
+/>
 export default function UpdateFund(props) {
     const { show, onHide, selectData, onSaves } = props
-    console.log("isi select props", selectData)
+    // console.log("isi select props", selectData)
     const [preview, setPreview] = useState()
     const [fund, setFund] = useState({
         title: '',
@@ -15,6 +23,14 @@ export default function UpdateFund(props) {
         image: '',
 
     })
+    useEffect(() => {
+        setFund({
+            title: selectData?.title,
+            goals: selectData?.goals,
+            description: selectData?.description,
+        })
+    }, [selectData])
+    // console.log("isi select props", fund)
 
     const handleOnChange = (e) => {
         setFund({
@@ -79,7 +95,7 @@ export default function UpdateFund(props) {
                                 type="text"
                                 placeholder="Title"
                                 name="title"
-                                // defaultValue={selectData.title}
+                                value={fund?.title}
                                 onChange={handleOnChange}
                                 onFocus
 
@@ -90,7 +106,7 @@ export default function UpdateFund(props) {
                                 type="number"
                                 placeholder="Goals"
                                 name="goals"
-                                // defaultValue={selectData.goals}
+                                value={fund?.goals}
                                 onChange={handleOnChange}
 
                             />
@@ -101,7 +117,7 @@ export default function UpdateFund(props) {
                         >
                             <Form.Label>Description</Form.Label>
                             <Form.Control as="textarea" rows={3} style={{ borderWidth: "2px", borderColor: "grey", backgroundColor: "#E5E5E5" }}
-                                // defaultValue={selectData.description}
+                                value={fund?.description}
                                 name="description"
                                 onChange={handleOnChange}
 

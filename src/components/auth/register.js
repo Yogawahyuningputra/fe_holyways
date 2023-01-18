@@ -4,6 +4,7 @@ import { Modal, Form, Button, Card, Alert } from "react-bootstrap"
 import { useMutation } from 'react-query'
 import { API } from '../../config/api'
 import '../../App.css'
+import Swal from 'sweetalert2'
 
 function Register({ show, onHide, tologin }) {
 
@@ -48,11 +49,16 @@ function Register({ show, onHide, tologin }) {
 
             const response = await API.post('/register', formData, user, config)
             console.log(response)
+
             if (response.data.code === 200) {
-                const alert = (
-                    <Alert variant="success" className='py-1'>Success</Alert>
-                )
-                setMessage(alert)
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Register has been saved',
+                    showConfirmButton: false,
+                    timer: 3000
+                })
+
                 setUser({
                     fullname: '',
                     email: '',
@@ -63,10 +69,12 @@ function Register({ show, onHide, tologin }) {
                 })
             }
         } catch (error) {
-            const alert = (
-                <Alert variant="danger" className='py-1'>Failed</Alert>
-            )
-            setMessage(alert)
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong!',
+
+            })
             console.log(error)
         }
 

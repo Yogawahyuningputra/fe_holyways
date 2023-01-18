@@ -51,7 +51,7 @@ function Funding() {
 
             </Col>
 
-            <Row xs="3" className="d-flex justify-content-center gap-2">
+            <Row xs="3" className="d-flex justify-content-start gap-3">
 
 
                 {Funding?.filter((value) => {

@@ -4,6 +4,8 @@ import { useMutation } from 'react-query'
 import { API } from '../../config/api'
 import { UserContext } from '../../context/userContext'
 import { useNavigate } from 'react-router-dom'
+import Swal from 'sweetalert2'
+
 
 function Login({ show, onHide, toregister, loginClose }) {
     const navigate = useNavigate()
@@ -36,18 +38,27 @@ function Login({ show, onHide, toregister, loginClose }) {
             formData.set("password", userLogin.password)
 
             const response = await API.post('/login', formData, userLogin, config)
-
+            if (response.data.code === 200) {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Login has been success',
+                    showConfirmButton: false,
+                    timer: 3000
+                })
+            }
             //send data to usecontext => create token 
             dispatch({
                 type: 'LOGIN_SUCCESS',
                 payload: response.data.data
             })
+
             setUserLogin({
                 email: '',
                 password: '',
             })
 
-            navigate(0)
+            // navigate(0)
         } catch (error) {
             const alert = (
                 <Alert variant="danger" className='py-1'>Failed</Alert>

@@ -1,35 +1,62 @@
 import React, { useContext, useState } from "react"
 import { Container, Row, Stack, Card, Button, Col, Badge } from "react-bootstrap"
 import Img from "react-bootstrap/Image";
-import { dataContext } from "../../App";
 import User from "../../components/assest/images/user.png"
 import Gender from "../../components/assest/images/gender.png"
 import Phone from "../../components/assest/images/phone.png"
 import Mail from "../../components/assest/images/mail.png"
 import Address from "../../components/assest/images/address.png"
-import ProfileUser from "../../components/assest/images/profileuser.png"
 import UpdateUser from "./updateuser";
 import { UserContext } from "../../context/userContext"
 import { useQuery } from "react-query";
 import { API } from "../../config/api";
 import moment from 'moment'
 import '../../App.css'
+import { RotatingLines } from 'react-loader-spinner'
+
 
 
 export default function Profile() {
     const [update, setUpdate] = useState(false);
-
+    const [value, setValue] = useState(null)
     const [state] = useContext(UserContext)
+    let { data: user, refetch: refetchUser, isFetching } = useQuery("user", async () => {
+        const response = await API.get(`/user/${state.user.id}`)
+        return response.data.data
+    })
+    // console.log(user)
     const { data: History } = useQuery("historyCache", async () => {
         const response = await API.get("/donationByUser")
         return response.data.data
     })
     // console.log("history", History)
+
+    const handleUpdate = (user) => {
+        setUpdate(true)
+        setValue(user)
+
+    }
+    // console.log("isi user", value)
     const formatIDR = new Intl.NumberFormat(undefined, {
         style: "currency",
         currency: "IDR",
         maximumFractionDigits: 0,
     })
+
+    if (isFetching) {
+        return (
+            <div className='d-flex justify-content-center' style={{ marginTop: "13rem" }}>
+                <RotatingLines
+                    strokeColor="grey"
+                    strokeWidth="5"
+                    animationDuration="0.75"
+                    width="96"
+                    visible={true}
+                />
+            </div>
+        )
+    }
+
     return (
         <Container className="d-flex justify-content-start w-100">
 
@@ -37,13 +64,13 @@ export default function Profile() {
                 <Card.Text style={{ fontWeight: "bold", fontSize: "25px" }}>My Profile</Card.Text>
                 <Row className="p-2 my-3 rounded-3" style={{ boxShadow: "0px 0px 5px black", backgroundColor: "white" }}>
 
-                    <Col>
+                    <Col key={user?.id}>
                         <Stack direction="horizontal" gap={5} className="mb-2">
 
                             <Img src={User} style={{ width: "30px", height: "30px" }} />
 
                             <Stack direction="vertical">
-                                <Card.Text style={{ fontSize: "16px", fontWeight: "bold", marginBottom: "0px" }}>{state.user.fullname}</Card.Text>
+                                <Card.Text style={{ fontSize: "16px", fontWeight: "bold", marginBottom: "0px" }}>{user?.fullname}</Card.Text>
                                 <Card.Text style={{ fontSize: "14px", color: "#8A8C90" }}>Fullname</Card.Text>
                             </Stack>
                         </Stack>
@@ -52,7 +79,7 @@ export default function Profile() {
                             <Img src={Mail} style={{ width: "30px", height: "30px" }} />
 
                             <Stack direction="vertical">
-                                <Card.Text style={{ fontSize: "16px", fontWeight: "bold", marginBottom: "0px" }}>{state.user.email}</Card.Text>
+                                <Card.Text style={{ fontSize: "16px", fontWeight: "bold", marginBottom: "0px" }}>{user?.email}</Card.Text>
                                 <Card.Text style={{ fontSize: "14px", color: "#8A8C90" }}>Email</Card.Text>
                             </Stack>
                         </Stack>
@@ -60,7 +87,7 @@ export default function Profile() {
                             <Img src={Gender} style={{ width: "30px", height: "30px" }} />
 
                             <Stack direction="vertical">
-                                <Card.Text style={{ fontSize: "16px", fontWeight: "bold", marginBottom: "0px" }}>{state.user.gender}</Card.Text>
+                                <Card.Text style={{ fontSize: "16px", fontWeight: "bold", marginBottom: "0px" }}>{user?.gender}</Card.Text>
                                 <Card.Text style={{ fontSize: "14px", color: "#8A8C90" }}>Gender </Card.Text>
                             </Stack>
                         </Stack>
@@ -68,7 +95,7 @@ export default function Profile() {
                             <Img src={Phone} style={{ width: "30px", height: "30px" }} />
 
                             <Stack direction="vertical">
-                                <Card.Text style={{ fontSize: "16px", fontWeight: "bold", marginBottom: "0px" }}>{state.user.phone}</Card.Text>
+                                <Card.Text style={{ fontSize: "16px", fontWeight: "bold", marginBottom: "0px" }}>+62 {user?.phone}</Card.Text>
                                 <Card.Text style={{ fontSize: "14px", color: "#8A8C90" }}>Phone </Card.Text>
                             </Stack>
                         </Stack>
@@ -78,7 +105,7 @@ export default function Profile() {
                             <Img src={Address} style={{ width: "30px", height: "30px" }} />
 
                             <Stack direction="vertical">
-                                <Card.Text style={{ fontSize: "16px", fontWeight: "bold", marginBottom: "0px" }}>{state.user.address}</Card.Text>
+                                <Card.Text style={{ fontSize: "16px", fontWeight: "bold", marginBottom: "0px" }}>{user?.address}</Card.Text>
                                 <Card.Text style={{ fontSize: "14px", color: "#8A8C90" }}>Address</Card.Text>
                             </Stack>
                         </Stack>
@@ -86,7 +113,7 @@ export default function Profile() {
                     </Col>
                     <Col md={4} className="mt-2">
                         <Img className="rounded-3 "
-                            src={state.user.image}
+                            src={user?.image}
                             style={{
                                 width: "100%",
                                 height: "auto",
@@ -94,13 +121,16 @@ export default function Profile() {
                             }}
                         />
                         {/* <Button className="mb-1 mt-3 fw-bold" variant="warning" style={{ color: "white" }} onClick={() => setShow(true)}>Change Photo Profile</Button> */}
-                        <Button className="mb-1 mt-3 fw-bold w-100" variant="danger" style={{ color: "white" }} onClick={() => setUpdate(true)}>Change Profile</Button>
+                        <Button className="mb-1 mt-3 fw-bold w-100" variant="danger" style={{ color: "white" }} onClick={() => handleUpdate(user)}>Change Profile</Button>
 
                     </Col>
                     <UpdateUser
                         show={update}
-                        hide={() => {
+                        onHide={setUpdate}
+                        value={value}
+                        onSaves={() => {
                             setUpdate(false)
+                            refetchUser()
                         }}
 
 
@@ -138,11 +168,7 @@ export default function Profile() {
 
                 </Col>
             </Col>
-            <UpdateUser
-                show={update}
-                onHide={setUpdate}
 
-            />
         </Container >
     )
 }

@@ -5,13 +5,15 @@ import { API } from '../../config/api'
 import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2/dist/sweetalert2.js'
 import UpdateFund from '../admin/updateFund'
+import { RotatingLines } from 'react-loader-spinner'
+
 
 export default function DataFunding() {
     const [update, setUpdate] = useState(false)
     const [selectData, setSelectedData] = useState(null)
     let navigate = useNavigate()
 
-    let { data: myFunding, refetch: refetchUpdate } = useQuery("myFundingss", async () => {
+    let { data: myFunding, refetch: refetchUpdate, isLoading } = useQuery("myFundingss", async () => {
         const response = await API.get("/fundingByUser")
         return response.data.data
 
@@ -23,7 +25,20 @@ export default function DataFunding() {
         maximumFractionDigits: 0,
     })
 
+    if (isLoading) {
+        return (
 
+            <div className='d-flex justify-content-center' style={{ marginTop: "13rem" }}>
+                <RotatingLines
+                    strokeColor="grey"
+                    strokeWidth="5"
+                    animationDuration="0.75"
+                    width="96"
+                    visible={true}
+                />
+            </div>
+        )
+    }
     let ID = 0
     if (myFunding?.length !== 0) {
         myFunding?.map((element) => (
@@ -45,9 +60,10 @@ export default function DataFunding() {
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Yes, delete it!'
             })
-                .then((result) => {
+                .then(async (result) => {
 
                     if (result.isConfirmed) {
+                        await API.delete(`/funding/` + ID);
 
                         Swal.fire(
                             'Deleted!',
@@ -56,8 +72,8 @@ export default function DataFunding() {
                         )
                     }
                 })
-            await API.delete(`/funding/` + ID);
-            alert("sucess")
+
+            refetchUpdate();
         } catch (error) {
             console.error(error);
         }
@@ -72,7 +88,7 @@ export default function DataFunding() {
         setUpdate(true)
         setSelectedData(items)
     }
-    console.log("isi select awal ", selectData)
+    // console.log("isi select awal ", selectData)
 
     return (
 

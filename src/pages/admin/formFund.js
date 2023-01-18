@@ -3,6 +3,15 @@ import { Container, Form, Button, Card, } from 'react-bootstrap';
 import { useMutation } from "react-query";
 import { API } from "../../config/api"
 import Swal from 'sweetalert2'
+import { RotatingLines } from 'react-loader-spinner'
+
+<RotatingLines
+    strokeColor="grey"
+    strokeWidth="5"
+    animationDuration="0.75"
+    width="96"
+    visible={true}
+/>
 
 
 function FormFunding() {
@@ -28,6 +37,7 @@ function FormFunding() {
         }
     }
     const handleOnSubmit = useMutation(async (e) => {
+
         try {
             e.preventDefault()
             const config = {
@@ -92,7 +102,7 @@ function FormFunding() {
                 )}
 
                 <Form.Control onChange={handleOnChange}
-                    className="my-3 border-light"
+                    className="my-3 border-grey"
                     style={{ width: "100px", borderWidth: "2px", borderColor: "grey", }}
                     type="file"
                     placeholder="Attachment Files"
