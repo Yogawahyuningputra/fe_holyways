@@ -58,7 +58,7 @@ function Login({ show, onHide, toregister, loginClose }) {
                 password: '',
             })
 
-            // navigate(0)
+            navigate(0)
         } catch (error) {
             const alert = (
                 <Alert variant="danger" className='py-1'>Failed</Alert>
